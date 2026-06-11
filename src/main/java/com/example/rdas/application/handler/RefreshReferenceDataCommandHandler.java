@@ -3,20 +3,20 @@ package com.example.rdas.application.handler;
 import com.example.rdas.api.response.RefreshResponse;
 import com.example.rdas.application.command.RefreshReferenceDataCommand;
 import com.example.rdas.application.cqrs.ReferenceDataMessageHandler;
-import com.example.rdas.application.service.ReferenceDataApplicationService;
+import com.example.rdas.application.service.ReferenceDataCommandService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RefreshReferenceDataCommandHandler implements ReferenceDataMessageHandler<RefreshReferenceDataCommand, RefreshResponse> {
-    private final ReferenceDataApplicationService service;
+    private final ReferenceDataCommandService service;
 
-    public RefreshReferenceDataCommandHandler(ReferenceDataApplicationService service) {
+    public RefreshReferenceDataCommandHandler(ReferenceDataCommandService service) {
         this.service = service;
     }
 
     @Override
-    public String messageName() {
-        return RefreshReferenceDataCommand.NAME;
+    public String commandName() {
+        return RefreshReferenceDataCommand.COMMAND_NAME;
     }
 
     @Override

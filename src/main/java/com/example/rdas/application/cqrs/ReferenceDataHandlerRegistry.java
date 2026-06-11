@@ -15,15 +15,15 @@ public class ReferenceDataHandlerRegistry {
     public ReferenceDataHandlerRegistry(List<ReferenceDataMessageHandler<?, ?>> handlers) {
         this.handlers = handlers.stream()
                 .collect(Collectors.toUnmodifiableMap(
-                        ReferenceDataMessageHandler::messageName,
+                        ReferenceDataMessageHandler::commandName,
                         Function.identity()));
     }
 
-    public ReferenceDataMessageHandler<?, ?> get(String messageName) {
-        ReferenceDataMessageHandler<?, ?> handler = handlers.get(messageName);
+    public ReferenceDataMessageHandler<?, ?> get(String commandName) {
+        ReferenceDataMessageHandler<?, ?> handler = handlers.get(commandName);
         if (handler == null) {
             throw new ReferenceDataException("UNSUPPORTED_SERVICE",
-                    "Unsupported service: " + messageName, HttpStatus.BAD_REQUEST);
+                    "Unsupported service: " + commandName, HttpStatus.BAD_REQUEST);
         }
         return handler;
     }

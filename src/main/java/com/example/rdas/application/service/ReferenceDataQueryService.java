@@ -2,8 +2,6 @@ package com.example.rdas.application.service;
 
 import com.example.rdas.api.request.PageRequestData;
 import com.example.rdas.api.response.PagedCountriesResponse;
-import com.example.rdas.api.response.RefreshResponse;
-import com.example.rdas.application.command.RefreshReferenceDataCommand;
 import com.example.rdas.application.query.CountriesByCurrencyQuery;
 import com.example.rdas.application.query.CountryDetailsQuery;
 import com.example.rdas.application.query.CountrySearchQuery;
@@ -12,7 +10,6 @@ import com.example.rdas.domain.model.ContinentReference;
 import com.example.rdas.domain.model.CountryReference;
 import com.example.rdas.domain.model.CurrencyReference;
 import com.example.rdas.domain.model.LanguageReference;
-import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -22,10 +19,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ReferenceDataApplicationService {
+public class ReferenceDataQueryService {
     private final CachedReferenceDataProvider dataProvider;
 
-    public ReferenceDataApplicationService(CachedReferenceDataProvider dataProvider) {
+    public ReferenceDataQueryService(CachedReferenceDataProvider dataProvider) {
         this.dataProvider = dataProvider;
     }
 
@@ -69,18 +66,6 @@ public class ReferenceDataApplicationService {
     @PreAuthorize("hasAuthority('reference-data:read')")
     public List<LanguageReference> getLanguages() {
         return dataProvider.getLanguages();
-    }
-
-    @PreAuthorize("hasAuthority('reference-data:refresh')")
-    public RefreshResponse refresh(RefreshReferenceDataCommand command) {
-        dataProvider.clearCaches();
-        if (command.refreshType() == RefreshReferenceDataCommand.RefreshType.FULL) {
-            dataProvider.getAllCountries();
-            dataProvider.getContinents();
-            dataProvider.getCurrencies();
-            dataProvider.getLanguages();
-        }
-        return new RefreshResponse(command.refreshType().name(), "COMPLETED", Instant.now());
     }
 
     private PagedCountriesResponse page(List<CountryReference> countries, PageRequestData request) {

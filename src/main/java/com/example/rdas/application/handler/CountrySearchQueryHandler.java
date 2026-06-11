@@ -3,20 +3,20 @@ package com.example.rdas.application.handler;
 import com.example.rdas.api.response.PagedCountriesResponse;
 import com.example.rdas.application.cqrs.ReferenceDataMessageHandler;
 import com.example.rdas.application.query.CountrySearchQuery;
-import com.example.rdas.application.service.ReferenceDataApplicationService;
+import com.example.rdas.application.service.ReferenceDataQueryService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CountrySearchQueryHandler implements ReferenceDataMessageHandler<CountrySearchQuery, PagedCountriesResponse> {
-    private final ReferenceDataApplicationService service;
+    private final ReferenceDataQueryService service;
 
-    public CountrySearchQueryHandler(ReferenceDataApplicationService service) {
+    public CountrySearchQueryHandler(ReferenceDataQueryService service) {
         this.service = service;
     }
 
     @Override
-    public String messageName() {
-        return CountrySearchQuery.NAME;
+    public String commandName() {
+        return CountrySearchQuery.COMMAND_NAME;
     }
 
     @Override

@@ -29,9 +29,9 @@ public class ReferenceDataCqrsDispatcher {
     public ReferenceDataResponse<?> dispatch(ReferenceDataRequest request) {
         ReferenceDataMessageHandler<?, ?> handler = handlerRegistry.get(request.service());
         ReferenceDataMessage message = convert(request, handler.messageType());
-        if (!request.service().equals(message.name())) {
+        if (!request.service().equals(message.commandName())) {
             throw new ReferenceDataException("UNSUPPORTED_SERVICE",
-                    "Service does not match message name: " + request.service(), HttpStatus.BAD_REQUEST);
+                    "Service does not match command name: " + request.service(), HttpStatus.BAD_REQUEST);
         }
         return ReferenceDataResponse.success(request.service(), invoke(handler, message));
     }

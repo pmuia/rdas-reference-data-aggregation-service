@@ -1,20 +1,38 @@
 # Reference Data Aggregation Service
 
-Spring Boot 3 and Java 17 service that exposes country reference data through one routed endpoint.
+Spring Boot 3 and Java 17 service that exposes country reference data through one CQRS-dispatched endpoint.
+
+## CQRS
+
+The request `service` value is the CQRS command name. Every message exposes the value through
+`COMMAND_NAME` and `commandName()`. `ReferenceDataCqrsDispatcher` resolves that command name through
+`ReferenceDataHandlerRegistry` and invokes one dedicated handler without a routing switch.
+
+| Service name | CQRS message |
+| --- | --- |
+| `reference.country.search` | `CountrySearchQuery` |
+| `reference.country.details` | `CountryDetailsQuery` |
+| `reference.country.currency` | `CountriesByCurrencyQuery` |
+| `reference.continent.list` | `ContinentsListQuery` |
+| `reference.currency.list` | `CurrenciesListQuery` |
+| `reference.language.list` | `LanguagesListQuery` |
+| `reference.data.refresh` | `RefreshReferenceDataCommand` |
+
+Queries use `ReferenceDataQueryService`. The refresh command uses `ReferenceDataCommandService`.
 
 ## Run locally
 
 The default profile requires a signed JWT. Use the `dev` profile for local development:
 
 ```bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 Run verification:
 
 ```bash
-./mvnw test
-./mvnw verify
+mvn test
+mvn verify
 ```
 
 Swagger UI is available at `http://localhost:8080/swagger-ui.html`.
@@ -65,7 +83,7 @@ The default profile uses an in-memory cache. Start Redis and enable the `redis` 
 
 ```bash
 docker run --name rdas-redis -p 6379:6379 -d redis:7
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dev,redis
+mvn spring-boot:run -Dspring-boot.run.profiles=dev,redis
 ```
 
 Configure Redis with `REDIS_HOST`, `REDIS_PORT`, and `RDAS_CACHE_TTL`.
@@ -73,6 +91,10 @@ Configure Redis with `REDIS_HOST`, `REDIS_PORT`, and `RDAS_CACHE_TTL`.
 ## SOAP integration
 
 The adapter follows the CountryInfoService WSDL at:
+
+`http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL`
+
+SOAP requests use:
 
 `http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso`
 

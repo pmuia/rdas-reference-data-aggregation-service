@@ -14,11 +14,11 @@ public record CountriesByCurrencyQuery(
         @Pattern(regexp = "countryName|countryCode|continentName|currencyCode") String sortBy,
         @Pattern(regexp = "(?i)ASC|DESC") String sortDirection) implements Query {
 
-    public static final String NAME = "reference.country.currency";
+    public static final String COMMAND_NAME = "reference.country.currency";
 
     @Override
-    public String name() {
-        return NAME;
+    public String commandName() {
+        return COMMAND_NAME;
     }
 
     public PageRequestData pageRequest() {

@@ -1,7 +1,7 @@
 package com.example.rdas.application.cqrs;
 
 public interface ReferenceDataMessageHandler<M extends ReferenceDataMessage, R> {
-    String messageName();
+    String commandName();
 
     Class<M> messageType();
 
