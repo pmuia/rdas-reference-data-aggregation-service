@@ -1,0 +1,9 @@
+spring:
+  cache:
+    type: redis
+    redis:
+      time-to-live: ${RDAS_CACHE_TTL:${rdas.cache.ttl}}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}

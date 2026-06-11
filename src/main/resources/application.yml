@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: rdas
+  cache:
+    type: simple
+rdas:
+  cache:
+    ttl: 30m
+  security:
+    jwt-secret: ${JWT_SECRET:local-development-secret-local-development-secret}
+  soap:
+    endpoint: http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso
+    connect-timeout: 2s
+    read-timeout: 5s
+
+resilience4j:
+  retry:
+    instances:
+      countryInfoSoap:
+        max-attempts: 3
+        wait-duration: 250ms
+  circuitbreaker:
+    instances:
+      countryInfoSoap:
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
